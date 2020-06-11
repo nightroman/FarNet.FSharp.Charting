@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <RunPostBuildEvent>1</RunPostBuildEvent>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Timer.fs" />
+    <Compile Include="ChartExt.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <PackageReference Include="FSharp.Charting" Version="2.1.0" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(FarDevHome)' != ''">
+    <PropertyGroup>
+      <MyOutDir>$(FarDevHome)\FarNet\Lib\$(AssemblyName)</MyOutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <MyBinFiles Include="$(OutDir)\*FSharp.Charting.*" Exclude="$(OutDir)\*.pdb" />
+    </ItemGroup>
+    <Copy DestinationFolder="$(MyOutDir)" SourceFiles="@(MyBinFiles)" SkipUnchangedFiles="true" />
+    <Exec Command="ib Post" />
+  </Target>
+</Project>
