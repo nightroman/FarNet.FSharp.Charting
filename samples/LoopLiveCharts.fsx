@@ -1,4 +1,4 @@
-// Mix or loop and live: LiveChart.LineIncremental, Chart.Combine, Chart.Show (loop)
+// Mix of loop and live: LiveChart.LineIncremental, Chart.Combine, Chart.Show (loop)
 // We are watching evolution of N processes. Every M seconds one process dies
 // and its chart is replaced with a new process chart.
 
@@ -29,11 +29,12 @@ fun () ->
     | None ->
         charts <- Some (Array.init count chart)
     | Some charts ->
-        let index = rand.Next count
+        let index = rand.Next(count)
         charts.[index] <- chart index
 
     // combine charts
     Chart.Combine(charts.Value)
+    |> Chart.WithXAxis(Min=0.0)
     |> Chart.WithYAxis(Min=0.0, Max=size)
     |> Chart.WithLegend(Docking=ChartTypes.Docking.Left)
 

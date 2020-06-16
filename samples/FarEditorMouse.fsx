@@ -23,7 +23,7 @@ fun () ->
 
 |> Chart.Show(
     title="All mouse moves",
-    location=(0, 0), size=(300, 300)
+    area=(3, 2, 0, 0)
 )
 
 // Chart 2 shows last 50 mouse moves. It uses the usual LiveChart.Line,
@@ -43,5 +43,5 @@ fun () ->
 
 |> Chart.Show(
     title="Last 50 moves",
-    location=(0, 300), size=(300, 300)
+    area=(3, 2, 0, 1)
 )

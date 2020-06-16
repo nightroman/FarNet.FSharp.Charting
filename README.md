@@ -1,13 +1,11 @@
 [NuGet]: https://www.nuget.org/packages/FarNet.FSharp.Charting
 [GitHub]: https://github.com/nightroman/FarNet.FSharp.Charting
 [/samples]: https://github.com/nightroman/FarNet.FSharp.Charting/tree/master/samples
+[FSharp.Charting]: https://fslab.org/FSharp.Charting/index.html
 
 # FarNet.FSharp.Charting
 
-FarNet friendly FSharp.Charting extension
-
-- [FSharp.Charting](https://fslab.org/FSharp.Charting/index.html)
-- [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/master/FSharpFar)
+FarNet friendly [FSharp.Charting] extension
 
 ## Package
 
@@ -18,23 +16,18 @@ To install FarNet packages, follow [these steps](https://raw.githubusercontent.c
 
 ## Features
 
-*FarNet.FSharp.Charting* does not require FarNet or Far Manager.
-The library may be used in usual F# projects for its features:
+In addition to the original library features:
 
-- The library may be used in MTA thread environments.
-- Optional timer loop, often easier than live charts.
+- The library may be called from MTA threads.
+- Loop charts, often easier than live charts.
 - Chart windows are modeless by default.
 - Chart windows provide more options.
-- Some helpers for live charts.
-
-But the library is specifically designed for FarNet F# modules and FSharpFar F#
-scripts. In this environment apart from adding new features the library works
-around FSharp.Charting STA requirements.
+- Timer helpers for live charts.
 
 ## How to use
 
 Instead of the original `Chart.Show` taking a chart instance, use the new
-method `Chart.Show` which takes a chart making function and other useful
+method `Chart.Show` which takes a chart making function and a few optional
 parameters.
 
 Example, instead of the original method:
@@ -56,19 +49,19 @@ fun () ->
 
 The new method is slightly more verbose but it has some advantages:
 
-- It is modeless by default. The original is modal, always.
+- It is modeless by default, the original is always modal.
 - It works well in Far Manager, unlike the original.
-- It adds handy features using extra parameters.
-- It may be used in MTA threads.
+- It provides handy features via parameters.
+- It may be called from MTA threads.
 
-Note that the original `Chart.Show` partially works in FarNet. It shows charts.
-So you may use it for easier prototyping. But some features may not work, for
-example context menu commands "copy to clipboard", "save as", etc.
+The original `Chart.Show` is still available and partially works in FarNet. It
+shows charts. But some features may not work, for example context menu commands
+"copy to clipboard", "save as", etc.
 
 ## "Loop" and "Live" charts
 
 There are two ways of showing charts with dynamic content:
-new loop charts and the original live charts.
+new loop charts and original live charts.
 
 Loop charts are very easy, just specify the required timer interval as the
 parameter `loop`:
@@ -86,39 +79,34 @@ then some conversion is needed. See the original manual for the details.
 
 Unlike loop charts, live charts cannot change chart parameters dynamically.
 
-Why do we need live charts then? There are at least three reasons:
+Live charts are still useful:
 
 - Live charts may be more effective because only data change on updates.
 - Live charts provide useful incremental charts right out of the box.
 - Live charts are easier to code when data come from events.
 
-The last note. If you accidentally (!) use live charts with loop shows, i.e.
-`LiveChart.X |> Chart.Show(loop=...)` then the result may be unexpected.
-But this is allowed and in some cases may be used very effectively.
-See *LoopLiveCharts* in samples.
+If you accidentally (!) use live charts with loop shows then the result
+may be unexpected. But this is allowed and in some cases used effectively.
+See [LoopLiveCharts.fsx](https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/samples/LoopLiveCharts.fsx)
 
 ## Timers for live charts
 
 For generating live chart events you may use `System.Windows.Forms.Timer` or
 its handy helpers `Timer.map` and `Timer.mapi`. Important:
 
-- Timers and mappings must be used inside chart making functions.
-- Do not use other timer classes, e.g. `System.Timers.Timer`.
+- Timers and mappings must be created in chart making functions.
+- Do not use other timer classes like `System.Timers.Timer`.
 
 ## Using with FSharpFar
 
-In the script directory create the configuration `*.fs.ini`:
+In your script directory create the configuration `*.fs.ini`:
 
 ```ini
 [use]
 %FARHOME%\FarNet\Lib\FarNet.FSharp.Charting\FarNet.FSharp.Charting.ini
 ```
 
-This is it. Scripts normally contain `open FSharp.Charting`.
-This "opens" both `FSharp.Charting` types and `FarNet.FSharp.Charting` extensions.
-
-See [/samples]. They are ready to use examples of various scenarios and
-features, focusing on added by *FarNet.FSharp.Charting*.
+This is it. See [/samples].
 
 ## Notes
 
@@ -126,8 +114,7 @@ Features and API may change before v1.0.
 
 The project is suitable for cloning and building with dotnet.
 
-*FSharpFar* development and tools are optional.
-They require:
+*FSharpFar* development and tools are optional. They require:
 
 - *Far Manager* in `C:\Bin\Far\x64`
 - FarNet module *FarNet.FSharpFar*

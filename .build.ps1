@@ -73,13 +73,10 @@ task Meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.prop
 
 # Synopsis: Collect package files.
 task Package -If:$FarDevHome Markdown, {
-	$toLib = "z\lib\net45"
-	$toModule = "z\tools\FarHome\FarNet\Lib\$ModuleName"
-	$fromModule = "$FarDevHome\FarNet\Lib\$ModuleName"
-
 	remove z
-	$null = mkdir $toLib
-	$null = mkdir $toModule
+	$toLib = mkdir "z\lib\net45"
+	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$ModuleName"
+	$fromModule = "$FarDevHome\FarNet\Lib\$ModuleName"
 
 	Copy-Item -Destination $toLib @(
 		"$fromModule\FarNet.FSharp.Charting.dll"
@@ -132,7 +129,7 @@ https://raw.githubusercontent.com/nightroman/FarNet/master/Install-FarNet.en.txt
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>$text</summary>
 		<description>$text</description>
-		<releaseNotes>https://raw.githubusercontent.com/nightroman/$ModuleName/master/Release-Notes.md</releaseNotes>
+		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
 		<dependencies>
 			<group targetFramework=".NETFramework4.5">
