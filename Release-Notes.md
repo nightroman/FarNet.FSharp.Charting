@@ -1,6 +1,6 @@
 # FarNet.FSharp.Charting Release Notes
 
-## v0.1.1
+## v0.1.2
 
 Update package info.
 

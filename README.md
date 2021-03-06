@@ -12,7 +12,7 @@ FarNet friendly [FSharp.Charting] extension
 The NuGet package [FarNet.FSharp.Charting][NuGet] may be used as usual in F# projects.
 
 The package is also designed for [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/master/FSharpFar).
-To install FarNet packages, follow [these steps](https://raw.githubusercontent.com/nightroman/FarNet/master/Install-FarNet.en.txt).
+To install FarNet packages, follow [these steps](https://github.com/nightroman/FarNet#readme).
 
 ## Features
 
