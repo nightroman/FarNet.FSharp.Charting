@@ -1,5 +1,9 @@
 # FarNet.FSharp.Charting Release Notes
 
+## v0.1.1
+
+Update package info.
+
 ## v0.1.0
 
 New parameter `area` of `Chart.Show()`.

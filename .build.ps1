@@ -1,6 +1,6 @@
 <#
 .Synopsis
-	Build script (https://github.com/nightroman/Invoke-Build)
+	Build script, https://github.com/nightroman/Invoke-Build
 #>
 
 param(
@@ -12,18 +12,18 @@ $ModuleName = 'FarNet.FSharp.Charting'
 $env:FarDevHome = $FarDevHome = if (Test-Path 'C:\Bin\Far\x64') {'C:\Bin\Far\x64'} else {''}
 
 # Synopsis: Remove temp files.
-task Clean {
+task clean {
 	remove src\bin, src\obj, README.htm, *.nupkg, z
 }
 
 # Synopsis: Build and Post (post build target).
-task Build {
+task build {
 	Set-Location src
 	exec {dotnet build -c $Configuration}
 }
 
 # Synopsis: Post build target. Copy stuff.
-task Post -If:$FarDevHome {
+task post -If:$FarDevHome {
 	$to = "$FarDevHome\FarNet\Lib\$ModuleName"
 	Copy-Item "src\$ModuleName.ini" $to
 
@@ -38,12 +38,12 @@ function Get-Version {
 }
 
 # Synopsis: Set $script:Version.
-task Version {
+task version {
 	($script:Version = Get-Version)
 }
 
 # Synopsis: Convert markdown to HTML.
-task Markdown {
+task markdown {
 	assert (Test-Path $env:MarkdownCss)
 	exec { pandoc.exe @(
 		'README.md'
@@ -55,7 +55,7 @@ task Markdown {
 }
 
 # Synopsis: Generate meta files.
-task Meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.props -Jobs Version, {
+task meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.props -Jobs version, {
 	Set-Content src/Directory.Build.props @"
 <Project>
 	<PropertyGroup>
@@ -72,9 +72,9 @@ task Meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.prop
 }
 
 # Synopsis: Collect package files.
-task Package -If:$FarDevHome Markdown, {
+task package -If:$FarDevHome markdown, {
 	remove z
-	$toLib = mkdir "z\lib\net45"
+	$toLib = mkdir "z\lib\net472"
 	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$ModuleName"
 	$fromModule = "$FarDevHome\FarNet\Lib\$ModuleName"
 
@@ -85,7 +85,7 @@ task Package -If:$FarDevHome Markdown, {
 
 	Copy-Item -Destination $toModule @(
 		'README.htm'
-		'LICENSE.txt'
+		'LICENSE'
 		"$fromModule\FarNet.FSharp.Charting.dll"
 		"$fromModule\FarNet.FSharp.Charting.ini"
 		"$fromModule\FarNet.FSharp.Charting.xml"
@@ -95,7 +95,7 @@ task Package -If:$FarDevHome Markdown, {
 }
 
 # Synopsis: Make NuGet package.
-task NuGet -If:$FarDevHome Package, Version, {
+task nuget -If:$FarDevHome package, version, {
 	# test versions
 	$dllPath = "$FarDevHome\FarNet\Lib\$ModuleName\$ModuleName.dll"
 	($dllVersion = (Get-Item $dllPath).VersionInfo.FileVersion.ToString())
@@ -111,7 +111,7 @@ The package may be used as usual in F# projects.
 It is also configured for FarNet.FSharpFar.
 To install FarNet packages, follow these steps:
 
-https://raw.githubusercontent.com/nightroman/FarNet/master/Install-FarNet.en.txt
+https://github.com/nightroman/FarNet#readme
 
 ---
 '@
@@ -132,7 +132,7 @@ https://raw.githubusercontent.com/nightroman/FarNet/master/Install-FarNet.en.txt
 		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
 		<dependencies>
-			<group targetFramework=".NETFramework4.5">
+			<group targetFramework=".NETFramework4.7.2">
 				<dependency id="FSharp.Charting" version="2.1.0" />
 			</group>
 		</dependencies>
@@ -143,4 +143,4 @@ https://raw.githubusercontent.com/nightroman/FarNet/master/Install-FarNet.en.txt
 	exec { NuGet.exe pack z\Package.nuspec }
 }
 
-task . Build, Clean
+task . build, clean
