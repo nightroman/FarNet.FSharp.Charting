@@ -17,10 +17,10 @@ fun () ->
         |> Seq.take 20
 
     Chart
-        .Column(data, Name="Process", Title=(sprintf "WorkingSet (mb) %O" System.DateTime.Now))
+        .Column(data, Name="Process", Title=($"WorkingSet (mb) {System.DateTime.Now}"))
         .WithXAxis(LabelStyle=ChartTypes.LabelStyle(-45, Interval=1.0))
 
 |> Chart.Show(
     title="Processes", topMost=true, loop=2000,
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

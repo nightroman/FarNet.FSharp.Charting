@@ -12,5 +12,5 @@ fun () ->
     |> LiveChart.LineIncremental
 
 |> Chart.Show(
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

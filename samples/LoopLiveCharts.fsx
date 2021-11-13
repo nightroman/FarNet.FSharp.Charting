@@ -1,4 +1,4 @@
-// Mix of loop and live: LiveChart.LineIncremental, Chart.Combine, Chart.Show (loop)
+// Mix of loop and live: LiveChart.LineIncremental, Chart.Combine, Chart.Show(loop)
 // We are watching evolution of N processes. Every M seconds one process dies
 // and its chart is replaced with a new process chart.
 
@@ -30,7 +30,7 @@ fun () ->
         charts <- Some (Array.init count chart)
     | Some charts ->
         let index = rand.Next(count)
-        charts.[index] <- chart index
+        charts[index] <- chart index
 
     // combine charts
     Chart.Combine(charts.Value)
@@ -41,5 +41,5 @@ fun () ->
 |> Chart.Show(
     loop=5000,
     title=sprintf "%i processes" count,
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

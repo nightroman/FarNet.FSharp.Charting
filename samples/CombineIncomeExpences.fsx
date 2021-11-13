@@ -27,5 +27,5 @@ fun () ->
     |> Chart.WithLegend(Docking=ChartTypes.Docking.Left)
 
 |> Chart.Show(
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

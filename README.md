@@ -26,9 +26,8 @@ In addition to the original library features:
 
 ## How to use
 
-Instead of the original `Chart.Show` taking a chart instance, use the new
-method `Chart.Show` which takes a chart making function and a few optional
-parameters.
+Instead of the original `Chart.Show` with a chart instance, use the new
+method `Chart.Show` with a function which creates and configures a chart.
 
 Example, instead of the original method:
 
@@ -109,8 +108,6 @@ In your script directory create the configuration `*.fs.ini`:
 This is it. See [/samples].
 
 ## Notes
-
-Features and API may change before v1.0.
 
 The project is suitable for cloning and building with dotnet.
 

@@ -15,7 +15,7 @@ let points = Array.init count (fun _ -> random () * size, random () * size)
 
 fun () ->
     // move each point
-    points |> Array.iteri (fun i (x, y) -> points.[i] <- move x, move y)
+    points |> Array.iteri (fun i (x, y) -> points[i] <- move x, move y)
 
     // create the chart
     Chart.Point(points, Name="Points")
@@ -24,5 +24,5 @@ fun () ->
 
 |> Chart.Show(
     title="Random moves", loop=50, size=(500, 500),
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

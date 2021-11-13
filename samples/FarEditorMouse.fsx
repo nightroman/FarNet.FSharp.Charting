@@ -30,13 +30,13 @@ fun () ->
 // so we maintain and feed the queue of last coordinates ourselves.
 
 fun () ->
-    let queue = System.Collections.Generic.Queue ()
+    let queue = System.Collections.Generic.Queue()
 
     editorMouseXY
     |> Observable.map (fun xy ->
         queue.Enqueue xy
         if queue.Count > 50 then
-            queue.Dequeue () |> ignore
+            queue.Dequeue() |> ignore
         queue
     )
     |> LiveChart.Line

@@ -12,10 +12,10 @@ let trajectory g k t =
 fun () ->
     trajectory 0.02 5e2 1500
     |> Chart.Line
-    |> Chart.WithXAxis (Title="Rabbits", Min=0.0)
-    |> Chart.WithYAxis (Title="Foxes")
+    |> Chart.WithXAxis(Title="Rabbits", Min=0.0)
+    |> Chart.WithYAxis(Title="Foxes")
 
 |> Chart.Show(
     title="Foxes and Rabbits",
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

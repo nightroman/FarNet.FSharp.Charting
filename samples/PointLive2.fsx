@@ -17,8 +17,8 @@ let points = Array.init count (fun _ -> random () * size, random () * size)
 fun () ->
     Array.init count (fun i ->
         Timer.map 50 (fun () ->
-            points.[i] <- move2 points.[i]
-            points.[i]
+            points[i] <- move2 points[i]
+            points[i]
         )
         |> LiveChart.FastPointIncremental
     )
@@ -28,5 +28,5 @@ fun () ->
 
 |> Chart.Show(
     size=(500, 500),
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

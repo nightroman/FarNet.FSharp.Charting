@@ -20,5 +20,5 @@ fun () ->
 
 |> Chart.Show(
     title="Benford Law",
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

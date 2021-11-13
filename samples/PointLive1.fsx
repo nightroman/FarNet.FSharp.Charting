@@ -16,7 +16,7 @@ let points = Array.init count (fun _ -> random () * size, random () * size)
 fun () ->
     let data =
         Timer.map 50 (fun () ->
-            points |> Array.iteri (fun i (x, y) -> points.[i] <- move x, move y)
+            points |> Array.iteri (fun i (x, y) -> points[i] <- move x, move y)
             points
         )
 
@@ -26,5 +26,5 @@ fun () ->
 
 |> Chart.Show(
     size=(500, 500),
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

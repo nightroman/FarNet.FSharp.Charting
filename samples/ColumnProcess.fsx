@@ -16,5 +16,5 @@ fun () ->
 
 |> Chart.Show(
     title="Processes",
-    modal=fsi.CommandLineArgs.[0].EndsWith(".fsx")
+    modal=fsi.CommandLineArgs[0].EndsWith(".fsx")
 )

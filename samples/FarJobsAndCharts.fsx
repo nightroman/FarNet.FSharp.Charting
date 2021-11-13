@@ -22,7 +22,7 @@ async {
         |> Chart.Show(modal=true, location=(0, 0))
 
         // Far job: input box for a new factor
-        match! job {return far.Input ("Try different factor", null, "Chart", string factor)} with
+        match! job {return far.Input("Try different factor", null, "Chart", string factor)} with
         | null ->
             // stop
             loop <- false
