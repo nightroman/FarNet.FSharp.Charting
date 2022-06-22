@@ -9,14 +9,14 @@ FarNet friendly [FSharp.Charting] extension
 
 ## Package
 
-The NuGet package [FarNet.FSharp.Charting][NuGet] may be used as usual in F# projects.
-
-The package is also designed for [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/master/FSharpFar).
+The package is designed for [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/master/FSharpFar).
 To install FarNet packages, follow [these steps](https://github.com/nightroman/FarNet#readme).
+
+The package is based on [FSharp.Charting].
 
 ## Features
 
-In addition to the original library features:
+In addition to the original FSharp.Charting features:
 
 - The library may be called from MTA threads.
 - Loop charts, often easier than live charts.
@@ -106,13 +106,3 @@ In your script directory create the configuration `*.fs.ini`:
 ```
 
 This is it. See [/samples].
-
-## Notes
-
-The project is suitable for cloning and building with dotnet.
-
-*FSharpFar* development and tools are optional. They require:
-
-- *Far Manager* in `C:\Bin\Far\x64`
-- FarNet module *FarNet.FSharpFar*
-- *Invoke-Build* with *.build.ps1*

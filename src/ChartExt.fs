@@ -45,7 +45,7 @@ type Chart with
 
         let worker () =
             let mutable cc0: IDisposable = null
-            use form = new Form ()
+            use form = new Form()
             form.Text <- title
             form.TopMost <- topMost
             form.KeyPreview <- true
@@ -56,65 +56,65 @@ type Chart with
                 let width = area.Width / nX
                 let height = area.Height / nY
                 form.StartPosition <- FormStartPosition.Manual
-                form.Size <- Size (width, height)
-                form.Location <- Point (iX * width, iY * height)
+                form.Size <- Size(width, height)
+                form.Location <- Point(iX * width, iY * height)
             | None ->
                 let width, height = defaultArg size (800, 600)
-                form.Size <- Size (width, height)
+                form.Size <- Size(width, height)
                 match location with
                 | Some (x, y) ->
                     form.StartPosition <- FormStartPosition.Manual
-                    form.Location <- Point (x, y)
+                    form.Location <- Point(x, y)
                 | None -> ()
 
             let mutable timer = null
-            form.Load.Add (fun _ ->
-                let cc1 = new ChartTypes.ChartControl (chart (), Dock=DockStyle.Fill)
+            form.Load.Add(fun _ ->
+                let cc1 = new ChartTypes.ChartControl(chart (), Dock=DockStyle.Fill)
                 cc0 <- cc1
                 form.Controls.Add cc1
-                form.Activate ()
+                form.Activate()
 
                 // timer setup
                 if loop > 0 then
-                    timer <- new Timer (Interval=loop)
-                    timer.Tick.Add (fun _ ->
+                    timer <- new Timer(Interval=loop)
+                    timer.Tick.Add(fun _ ->
                         // add the new chart first to avoid flickering
-                        let cc2 = new ChartTypes.ChartControl (chart (), Dock=DockStyle.Fill)
+                        let cc2 = new ChartTypes.ChartControl(chart (), Dock=DockStyle.Fill)
                         form.Controls.Add cc2
 
                         // then remove the old chart
                         form.Controls.Remove cc1
-                        cc0.Dispose ()
+                        cc0.Dispose()
                         cc0 <- cc2
                     )
-                    timer.Start ()
+                    timer.Start()
             )
 
-            form.KeyDown.Add (fun e ->
+            form.KeyDown.Add(fun e ->
                 if e.KeyCode = Keys.Escape then
-                    form.Close ()
+                    form.Close()
             )
 
-            form.ShowDialog () |> ignore
+            form.ShowDialog() |> ignore
             if not (isNull timer) then
-                timer.Dispose ()
-            cc0.Dispose ()
+                timer.Dispose()
+            cc0.Dispose()
 
         let thread = Thread worker
         thread.Name <- sprintf "UI thread for '%s'" title
         thread.SetApartmentState ApartmentState.STA
         thread.IsBackground <- true
-        thread.Start ()
+        thread.Start()
         if modal then
-            thread.Join ()
+            thread.Join()
 
     /// Pipeline friendly version of Show() with parameters:
-    /// // fun () -> ... |> Show (title = "Chart", ...)
-    /// // Show (title = "Chart", ...) <| fun () -> ...
-    /// // Show (title = "Chart", ...) (fun () -> ...)
-    static member Show (?title, ?modal, ?loop, ?area, ?size, ?location, ?topMost) =
+    /// // fun () -> ... |> Show(title = "Chart", ...)
+    /// // Show(title = "Chart", ...) <| fun () -> ...
+    /// // Show(title = "Chart", ...) (fun () -> ...)
+    static member Show(?title, ?modal, ?loop, ?area, ?size, ?location, ?topMost) =
         fun (chart: unit -> #ChartTypes.GenericChart) ->
-            Chart.Show (
+            Chart.Show(
                 chart,
                 ?title=title,
                 ?modal=modal,

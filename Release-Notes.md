@@ -1,5 +1,9 @@
 # FarNet.FSharp.Charting Release Notes
 
+## v0.2.0
+
+Uses .NET 6.
+
 ## v0.1.2
 
 Update package info.

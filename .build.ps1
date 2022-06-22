@@ -4,12 +4,13 @@
 #>
 
 param(
-	$Configuration = (property Configuration Release)
+	$Configuration = (property Configuration Release),
+	$FarHome = (property FarHome C:\Bin\Far\x64)
 )
 
 Set-StrictMode -Version 2
 $ModuleName = 'FarNet.FSharp.Charting'
-$env:FarDevHome = $FarDevHome = if (Test-Path 'C:\Bin\Far\x64') {'C:\Bin\Far\x64'} else {''}
+$ModuleHome = "$FarHome\FarNet\Lib\$ModuleName"
 
 # Synopsis: Remove temp files.
 task clean {
@@ -17,19 +18,22 @@ task clean {
 }
 
 # Synopsis: Build and Post (post build target).
-task build {
+task build meta, {
 	Set-Location src
 	exec {dotnet build -c $Configuration}
 }
 
-# Synopsis: Post build target. Copy stuff.
-task post -If:$FarDevHome {
-	$to = "$FarDevHome\FarNet\Lib\$ModuleName"
-	Copy-Item "src\$ModuleName.ini" $to
+# Synopsis: Post build event.
+task publish {
+	exec { dotnet publish src\FarNet.FSharp.Charting.fsproj -c $Configuration -o $ModuleHome --no-build }
+	Remove-Item "$ModuleHome\FarNet.FSharp.Charting.deps.json"
+	Copy-Item "src\$ModuleName.ini" $ModuleHome
 
-	$xml = [xml](Get-Content "src\$ModuleName.fsproj")
-	$node = $xml.SelectSingleNode('Project/ItemGroup/PackageReference[@Include="FSharp.Charting"]')
-	Copy-Item "$env:USERPROFILE\.nuget\packages\FSharp.Charting\$($node.Version)\lib\net45\FSharp.Charting.xml" $to
+	Set-Location $ModuleHome
+	remove FSharp.Core.dll, cs, de, en, es, fr, it, ja, ko, pl, pt-BR, ru, tr, zh-Hans, zh-Hant
+
+	Set-Location runtimes
+	remove unix, win-arm64
 }
 
 # Get version from release notes.
@@ -72,32 +76,23 @@ task meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.prop
 }
 
 # Synopsis: Collect package files.
-task package -If:$FarDevHome markdown, {
+task package markdown, {
 	remove z
-	$toLib = mkdir "z\lib\net472"
 	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$ModuleName"
-	$fromModule = "$FarDevHome\FarNet\Lib\$ModuleName"
 
-	Copy-Item -Destination $toLib @(
-		"$fromModule\FarNet.FSharp.Charting.dll"
-		"$fromModule\FarNet.FSharp.Charting.xml"
-	)
+	exec { robocopy $ModuleHome $toModule /s /xf *.pdb } (0..2)
+	equals 10 (Get-ChildItem $toModule -Recurse -File).Count
 
 	Copy-Item -Destination $toModule @(
-		'README.htm'
-		'LICENSE'
-		"$fromModule\FarNet.FSharp.Charting.dll"
-		"$fromModule\FarNet.FSharp.Charting.ini"
-		"$fromModule\FarNet.FSharp.Charting.xml"
-		"$fromModule\FSharp.Charting.dll"
-		"$fromModule\FSharp.Charting.xml"
+		"README.htm"
+		"LICENSE"
 	)
 }
 
 # Synopsis: Make NuGet package.
-task nuget -If:$FarDevHome package, version, {
+task nuget package, version, {
 	# test versions
-	$dllPath = "$FarDevHome\FarNet\Lib\$ModuleName\$ModuleName.dll"
+	$dllPath = "$FarHome\FarNet\Lib\$ModuleName\$ModuleName.dll"
 	($dllVersion = (Get-Item $dllPath).VersionInfo.FileVersion.ToString())
 	assert $dllVersion.StartsWith("$Version.") 'Versions mismatch.'
 
@@ -106,9 +101,6 @@ FarNet friendly FSharp.Charting extension
 
 ---
 
-The package may be used as usual in F# projects.
-
-It is also configured for FarNet.FSharpFar.
 To install FarNet packages, follow these steps:
 
 https://github.com/nightroman/FarNet#readme
@@ -131,11 +123,6 @@ https://github.com/nightroman/FarNet#readme
 		<description>$text</description>
 		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
-		<dependencies>
-			<group targetFramework=".NETFramework4.7.2">
-				<dependency id="FSharp.Charting" version="2.1.0" />
-			</group>
-		</dependencies>
 	</metadata>
 </package>
 "@

@@ -11,7 +11,7 @@ open System.Windows.Forms
 /// // interval: Timer interval in milliseconds.
 /// // func: Function getting the data.
 let map interval (func: unit -> _) =
-    let timer = new Timer (Interval=1)
+    let timer = new Timer(Interval=1)
     let res =
         timer.Tick
         |> Event.choose (fun _ ->
@@ -21,7 +21,7 @@ let map interval (func: unit -> _) =
             with _ ->
                 None
         )
-    timer.Start ()
+    timer.Start()
     res
 
 /// Maps timer event indexes to the specified function, normally getting data for LiveChart.
@@ -29,7 +29,7 @@ let map interval (func: unit -> _) =
 /// // interval: Timer interval in milliseconds.
 /// // func: Function getting the data.
 let mapi interval (func: int -> _) =
-    let timer = new Timer (Interval=1)
+    let timer = new Timer(Interval=1)
     let mutable index = -1
     let res =
         timer.Tick
@@ -41,5 +41,5 @@ let mapi interval (func: int -> _) =
             with _ ->
                 None
         )
-    timer.Start ()
+    timer.Start()
     res
