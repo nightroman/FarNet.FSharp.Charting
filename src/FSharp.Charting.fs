@@ -21,6 +21,9 @@
 
 #nowarn "40"
 
+// rk It uses its own obsolete members
+#nowarn "44"
+
 namespace FSharp.Charting
 
     open System

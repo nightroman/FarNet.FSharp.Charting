@@ -1,5 +1,9 @@
 # FarNet.FSharp.Charting Release Notes
 
+## v1.0.0
+
+Uses .NET 7.
+
 ## v0.2.1
 
 Fixed F# checker issues

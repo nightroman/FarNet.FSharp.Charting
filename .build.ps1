@@ -10,7 +10,7 @@ param(
 
 Set-StrictMode -Version 2
 $ModuleName = 'FarNet.FSharp.Charting'
-$ModuleHome = "$FarHome\FarNet\Lib\$ModuleName"
+$ModuleRoot = "$FarHome\FarNet\Lib\$ModuleName"
 
 # Synopsis: Remove temp files.
 task clean {
@@ -25,11 +25,11 @@ task build meta, {
 
 # Synopsis: Post build event.
 task publish {
-	exec { dotnet publish src\FarNet.FSharp.Charting.fsproj -c $Configuration -o $ModuleHome --no-build }
-	Remove-Item "$ModuleHome\FarNet.FSharp.Charting.deps.json"
-	Copy-Item "src\$ModuleName.ini" $ModuleHome
+	exec { dotnet publish src\FarNet.FSharp.Charting.fsproj -c $Configuration -o $ModuleRoot --no-build }
+	Remove-Item "$ModuleRoot\FarNet.FSharp.Charting.deps.json"
+	Copy-Item "src\$ModuleName.ini" $ModuleRoot
 
-	Set-Location $ModuleHome
+	Set-Location $ModuleRoot
 	remove FSharp.Core.dll, cs, de, en, es, fr, it, ja, ko, pl, pt-BR, ru, tr, zh-Hans, zh-Hant
 
 	Set-Location runtimes
@@ -80,7 +80,7 @@ task package markdown, {
 	remove z
 	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$ModuleName"
 
-	exec { robocopy $ModuleHome $toModule /s /xf *.pdb } (0..2)
+	exec { robocopy $ModuleRoot $toModule /s /xf *.pdb } (0..2)
 	equals 10 (Get-ChildItem $toModule -Recurse -File).Count
 
 	Copy-Item -Destination $toModule @(
@@ -118,10 +118,9 @@ https://github.com/nightroman/FarNet#readme
 		<owners>Roman Kuzmin</owners>
 		<projectUrl>https://github.com/nightroman/$ModuleName</projectUrl>
 		<license type="expression">Apache-2.0</license>
-		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>$text</summary>
 		<description>$text</description>
-		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/Release-Notes.md</releaseNotes>
+		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/main/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
 	</metadata>
 </package>

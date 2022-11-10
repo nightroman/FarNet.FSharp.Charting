@@ -1,6 +1,6 @@
 [NuGet]: https://www.nuget.org/packages/FarNet.FSharp.Charting
 [GitHub]: https://github.com/nightroman/FarNet.FSharp.Charting
-[/samples]: https://github.com/nightroman/FarNet.FSharp.Charting/tree/master/samples
+[/samples]: https://github.com/nightroman/FarNet.FSharp.Charting/tree/main/samples
 [FSharp.Charting]: https://fslab.org/FSharp.Charting/index.html
 
 # FarNet.FSharp.Charting
@@ -86,7 +86,7 @@ Live charts are still useful:
 
 If you accidentally (!) use live charts with loop shows then the result
 may be unexpected. But this is allowed and in some cases used effectively.
-See [LoopLiveCharts.fsx](https://github.com/nightroman/FarNet.FSharp.Charting/blob/master/samples/LoopLiveCharts.fsx)
+See [LoopLiveCharts.fsx](https://github.com/nightroman/FarNet.FSharp.Charting/blob/main/samples/LoopLiveCharts.fsx)
 
 ## Timers for live charts
 
