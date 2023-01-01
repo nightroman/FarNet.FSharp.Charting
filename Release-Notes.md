@@ -1,5 +1,9 @@
 # FarNet.FSharp.Charting Release Notes
 
+## v1.0.1
+
+Maintenance.
+
 ## v1.0.0
 
 Uses .NET 7.

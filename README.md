@@ -9,7 +9,7 @@ FarNet friendly [FSharp.Charting] extension
 
 ## Package
 
-The package is designed for [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/master/FSharpFar).
+The package is designed for [FarNet.FSharpFar](https://github.com/nightroman/FarNet/tree/main/FSharpFar).
 To install FarNet packages, follow [these steps](https://github.com/nightroman/FarNet#readme).
 
 The package is based on [FSharp.Charting].

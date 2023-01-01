@@ -11,6 +11,7 @@ param(
 Set-StrictMode -Version 2
 $ModuleName = 'FarNet.FSharp.Charting'
 $ModuleRoot = "$FarHome\FarNet\Lib\$ModuleName"
+$Description = 'FarNet friendly FSharp.Charting extension.'
 
 # Synopsis: Remove temp files.
 task clean {
@@ -65,7 +66,7 @@ task meta -Inputs .build.ps1, Release-Notes.md -Outputs src/Directory.Build.prop
 	<PropertyGroup>
 		<Company>https://github.com/nightroman/$ModuleName</Company>
 		<Copyright>Copyright (c) Roman Kuzmin</Copyright>
-		<Description>FarNet friendly FSharp.Charting extension</Description>
+		<Description>$Description</Description>
 		<Product>$ModuleName</Product>
 		<Version>$Version</Version>
 		<FileVersion>$Version</FileVersion>
@@ -83,6 +84,10 @@ task package markdown, {
 	exec { robocopy $ModuleRoot $toModule /s /xf *.pdb } (0..2)
 	equals 10 (Get-ChildItem $toModule -Recurse -File).Count
 
+	Copy-Item -Destination z @(
+		'README.md'
+	)
+
 	Copy-Item -Destination $toModule @(
 		"README.htm"
 		"LICENSE"
@@ -91,23 +96,10 @@ task package markdown, {
 
 # Synopsis: Make NuGet package.
 task nuget package, version, {
-	# test versions
 	$dllPath = "$FarHome\FarNet\Lib\$ModuleName\$ModuleName.dll"
 	($dllVersion = (Get-Item $dllPath).VersionInfo.FileVersion.ToString())
 	assert $dllVersion.StartsWith("$Version.") 'Versions mismatch.'
 
-	$text = @'
-FarNet friendly FSharp.Charting extension
-
----
-
-To install FarNet packages, follow these steps:
-
-https://github.com/nightroman/FarNet#readme
-
----
-'@
-	# nuspec
 	Set-Content z\Package.nuspec @"
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
@@ -116,16 +108,16 @@ https://github.com/nightroman/FarNet#readme
 		<version>$Version</version>
 		<authors>Roman Kuzmin</authors>
 		<owners>Roman Kuzmin</owners>
-		<projectUrl>https://github.com/nightroman/$ModuleName</projectUrl>
 		<license type="expression">Apache-2.0</license>
-		<summary>$text</summary>
-		<description>$text</description>
+		<readme>README.md</readme>
+		<projectUrl>https://github.com/nightroman/$ModuleName</projectUrl>
+		<description>$Description</description>
 		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/main/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
 	</metadata>
 </package>
 "@
-	# pack
+
 	exec { NuGet.exe pack z\Package.nuspec }
 }
 
