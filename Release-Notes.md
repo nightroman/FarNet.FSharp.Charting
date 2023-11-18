@@ -1,5 +1,9 @@
 # FarNet.FSharp.Charting Release Notes
 
+## v2.0.0
+
+Uses .NET 8
+
 ## v1.0.1
 
 Maintenance.
