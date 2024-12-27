@@ -101,17 +101,11 @@ FarNet.FSharp.Charting.ini
 FarNet.FSharp.Charting.xml
 LICENSE
 README.htm
-System.Configuration.ConfigurationManager.dll
 System.Data.OleDb.dll
 System.Data.SqlClient.dll
-System.Diagnostics.EventLog.dll
-System.Diagnostics.PerformanceCounter.dll
-System.Security.Cryptography.ProtectedData.dll
 System.Windows.Forms.DataVisualization.dll
-runtimes\win\lib\net8.0\System.Data.OleDb.dll
-runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll
-runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
-runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+runtimes\win\lib\net8.0\System.Data.SqlClient.dll
+runtimes\win\lib\net9.0\System.Data.OleDb.dll
 runtimes\win-x64\native\sni.dll
 runtimes\win-x86\native\sni.dll
 '@
@@ -143,6 +137,10 @@ task nuget package, version, {
 "@
 
 	exec { NuGet.exe pack z\Package.nuspec }
+}
+
+task test {
+	Invoke-Build ** test
 }
 
 task . build, clean
