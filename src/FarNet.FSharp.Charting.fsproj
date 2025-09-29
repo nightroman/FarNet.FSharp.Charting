@@ -4,6 +4,7 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
