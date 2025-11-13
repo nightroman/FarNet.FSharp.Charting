@@ -9,9 +9,9 @@ param(
 )
 
 Set-StrictMode -Version 3
-$ModuleName = 'FarNet.FSharp.Charting'
-$ModuleRoot = "$FarHome\FarNet\Lib\$ModuleName"
-$Description = 'FarNet friendly FSharp.Charting extension.'
+$_name = 'FarNet.FSharp.Charting'
+$_root = "$FarHome\FarNet\Lib\$_name"
+$_description = 'FarNet friendly FSharp.Charting extension.'
 
 # Synopsis: Remove temp files.
 task clean {
@@ -26,20 +26,20 @@ task build meta, {
 
 # Synopsis: Post build event.
 task publish {
-	exec { dotnet publish src\FarNet.FSharp.Charting.fsproj -c $Configuration -o $ModuleRoot --no-build }
-	Remove-Item "$ModuleRoot\FarNet.FSharp.Charting.deps.json"
-	Copy-Item "src\$ModuleName.ini" $ModuleRoot
+	exec { dotnet publish src\FarNet.FSharp.Charting.fsproj -c $Configuration -o $_root --no-build }
+	Remove-Item "$_root\FarNet.FSharp.Charting.deps.json"
+	Copy-Item "src\$_name.ini" $_root
 
-	Set-Location $ModuleRoot
+	Set-Location $_root
 	remove FSharp.Core.dll
 
 	Set-Location runtimes
-	remove unix, win-arm64
+	remove unix, win-arm64, win-x86
 }
 
 # Synopsis: Set $Script:Version.
 task version {
-	($Script:Version = Get-BuildVersion Release-Notes.md '##\s+v(\d+\.\d+\.\d+)')
+	($Script:_version = Get-BuildVersion Release-Notes.md '##\s+v(\d+\.\d+\.\d+)')
 }
 
 # Synopsis: Convert markdown to HTML.
@@ -52,7 +52,7 @@ task markdown {
 		'--embed-resources'
 		'--standalone'
 		"--css=$env:MarkdownCss"
-		"--metadata=pagetitle=$ModuleName"
+		"--metadata=pagetitle=$_name"
 	)}
 }
 
@@ -61,13 +61,13 @@ task meta -Inputs 1.build.ps1, Release-Notes.md -Outputs src/Directory.Build.pro
 	Set-Content src/Directory.Build.props @"
 <Project>
 	<PropertyGroup>
-		<Company>https://github.com/nightroman/$ModuleName</Company>
+		<Company>https://github.com/nightroman/$_name</Company>
 		<Copyright>Copyright (c) Roman Kuzmin</Copyright>
-		<Description>$Description</Description>
-		<Product>$ModuleName</Product>
-		<Version>$Version</Version>
-		<FileVersion>$Version</FileVersion>
-		<AssemblyVersion>$Version</AssemblyVersion>
+		<Description>$_description</Description>
+		<Product>$_name</Product>
+		<Version>$_version</Version>
+		<FileVersion>$_version</FileVersion>
+		<AssemblyVersion>$_version</AssemblyVersion>
 	</PropertyGroup>
 </Project>
 "@
@@ -76,9 +76,9 @@ task meta -Inputs 1.build.ps1, Release-Notes.md -Outputs src/Directory.Build.pro
 # Synopsis: Collect package files.
 task package markdown, {
 	remove z
-	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$ModuleName"
+	$toModule = mkdir "z\tools\FarHome\FarNet\Lib\$_name"
 
-	exec { robocopy $ModuleRoot $toModule /s /xf *.pdb } 1
+	exec { robocopy $_root $toModule /s } 1
 
 	Copy-Item -Destination z @(
 		'README.md'
@@ -92,37 +92,37 @@ task package markdown, {
 	Assert-SameFile.ps1 -Result (Get-ChildItem $toModule -Recurse -File -Name) -Text -View $env:MERGE -Sample @'
 FarNet.FSharp.Charting.dll
 FarNet.FSharp.Charting.ini
+FarNet.FSharp.Charting.pdb
 FarNet.FSharp.Charting.xml
 LICENSE
 README.htm
 System.Data.OleDb.dll
 System.Data.SqlClient.dll
 System.Windows.Forms.DataVisualization.dll
+runtimes\win\lib\net10.0\System.Data.OleDb.dll
 runtimes\win\lib\net8.0\System.Data.SqlClient.dll
-runtimes\win\lib\net9.0\System.Data.OleDb.dll
 runtimes\win-x64\native\sni.dll
-runtimes\win-x86\native\sni.dll
 '@
 }
 
 # Synopsis: Make NuGet package.
 task nuget package, version, {
-	$dllPath = "$FarHome\FarNet\Lib\$ModuleName\$ModuleName.dll"
+	$dllPath = "$FarHome\FarNet\Lib\$_name\$_name.dll"
 	($dllVersion = (Get-Item $dllPath).VersionInfo.FileVersion.ToString())
-	assert $dllVersion.StartsWith("$Version.") 'Versions mismatch.'
+	assert $dllVersion.StartsWith("$_version.") 'Versions mismatch.'
 
 	Set-Content z\Package.nuspec @"
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<id>$ModuleName</id>
-		<version>$Version</version>
+		<id>$_name</id>
+		<version>$_version</version>
 		<authors>Roman Kuzmin</authors>
 		<owners>Roman Kuzmin</owners>
 		<license type="expression">Apache-2.0</license>
 		<readme>README.md</readme>
-		<projectUrl>https://github.com/nightroman/$ModuleName</projectUrl>
-		<description>$Description</description>
+		<projectUrl>https://github.com/nightroman/$_name</projectUrl>
+		<description>$_description</description>
 		<releaseNotes>https://github.com/nightroman/FarNet.FSharp.Charting/blob/main/Release-Notes.md</releaseNotes>
 		<tags>FarManager FarNet FSharp Charting</tags>
 	</metadata>

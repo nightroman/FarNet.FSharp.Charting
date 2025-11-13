@@ -7,7 +7,7 @@ let trajectory g k t =
     let evolve (r, f) =
         let dtrf = 0.0001 * r * f
         r + (1.0 - r / k) * r * g - dtrf, dtrf + (1.0 - g) * f
-    Seq.scan (fun s _ -> evolve s) (50.0, 10.0) { 1 .. t }
+    List.scan (fun s _ -> evolve s) (50.0, 10.0) [ 1 .. t ]
 
 fun () ->
     trajectory 0.02 5e2 1500
